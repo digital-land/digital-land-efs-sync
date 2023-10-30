@@ -42,9 +42,6 @@ module.exports = class CollectionSync {
                 "digital-land-builder/dataset/digital-land.sqlite3",
                 "entity-builder/dataset/entity.sqlite3",
             ].includes(Key)) {
-                // TODO: When building entity and digital-land, output json files,
-                //   remove this if statement and always copy the json file to ensure
-                //   datasette stats are up to date.
                 await this.copyFileFromS3(`${Key}.json`, Bucket, `${finalFilePath}.json`);
             }
 
