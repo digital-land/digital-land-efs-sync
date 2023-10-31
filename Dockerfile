@@ -14,4 +14,4 @@ WORKDIR /src
 RUN pip install --user -U pip
 RUN pip install --user --no-cache-dir -r requirements/requirements.txt
 
-# ENTRYPOINT [ "" ]
+ENTRYPOINT [ "./load.sh" ]
