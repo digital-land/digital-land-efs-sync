@@ -7,6 +7,7 @@ echo "$EVENT_ID: running with settings: S3_BUCKET=$S3_BUCKET, S3_KEY=$S3_KEY, DA
 
 # Testing
 echo "$EVENT_ID: Run EFS Collection Sync"
+
 python3 -c "
 from collection_sync import CollectionSync
 
