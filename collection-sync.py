@@ -180,11 +180,3 @@ class CollectionSync:
         self.logger.info('Refreshed inspections', {'inspections': list(currentInspections.keys())})
 
 
-
-# Usage
-# eventId = "event_id"
-# collection_sync = CollectionSync(eventId)
-# Key = "s3_key"
-# Bucket = "3_bucket"
-# collection_sync.processObject(Key, Bucket)
-
