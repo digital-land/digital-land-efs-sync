@@ -16,7 +16,7 @@ class CollectionSync:
         self.logger = logging.getLogger('efs-sync-collection')
         self.logger.setLevel(LOG_LEVEL) 
         
-        formatter = logging.Formatter('{"service": "efs-sync-collection", "event": "' + eventId + '"}')
+        formatter = logging.Formatter(f'{{"service": "efs-sync-collection", "event": "{eventId}"}}')
         console_handler = logging.StreamHandler()
         console_handler.setFormatter(formatter)
         
