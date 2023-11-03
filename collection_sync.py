@@ -8,7 +8,7 @@ import boto3
 import json
 
 SPECIFICATION_URL = 'https://raw.githubusercontent.com/digital-land/specification/main/specification/dataset.csv'
-LOG_LEVEL = 'debug'
+LOG_LEVEL = 'DEBUG'
 
 class CollectionSync:
     def __init__(self, eventId):
