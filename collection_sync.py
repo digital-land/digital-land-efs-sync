@@ -13,10 +13,10 @@ SPECIFICATION_URL = 'https://raw.githubusercontent.com/digital-land/specificatio
 class CollectionSync:
     def __init__(self, eventId):
         self.s3_client = boto3.client('s3')
-        self.logger = logging.getLogger('efs-sync-collection')
+        self.logger = logging.getLogger('efs-sync')
         logging.basicConfig(level=logging.INFO)
         streamHandler = logging.StreamHandler(sys.stdout)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        formatter = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
         streamHandler.setFormatter(formatter)
         self.logger.addHandler(streamHandler)
 
