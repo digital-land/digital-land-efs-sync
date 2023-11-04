@@ -6,22 +6,24 @@ import requests
 from botocore.client import Config
 import boto3
 import json
-import sys
 
 SPECIFICATION_URL = 'https://raw.githubusercontent.com/digital-land/specification/main/specification/dataset.csv'
+LOG_LEVEL = 'DEBUG'
 
 class CollectionSync:
     def __init__(self, eventId):
         self.s3_client = boto3.client('s3')
         self.logger = logging.getLogger('efs-sync-collection')
-        logging.basicConfig(level=logging.INFO)
-        streamHandler = logging.StreamHandler(sys.stdout)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        streamHandler.setFormatter(formatter)
-        self.logger.addHandler(streamHandler)
+        self.logger.setLevel(LOG_LEVEL) 
+        
+        formatter = logging.Formatter('{"service": "efs-sync-collection", "event": "' + eventId + '"}')
+        console_handler = logging.StreamHandler()
+        console_handler.setFormatter(formatter)
+        
+        self.logger.addHandler(console_handler)
 
     def processObject(self, Key, Bucket):
-        self.logger.info(f'Processing new object - Key: {Key} Bucket: {Bucket}')
+        self.logger.info('Processing new object', {'Key': Key, 'Bucket': Bucket})
         fileName = os.path.basename(Key)
 
         if self.shouldSync(Key):
@@ -43,8 +45,7 @@ class CollectionSync:
 
             self.updateInspectionFile()
         else:
-            self.logger.info(f'Object is not subject to sync, skipping - Key: {Key} Bucket: {Bucket}')
-
+            self.logger.info('Object is not subject to sync, skipping.', {'Key': Key, 'Bucket': Bucket})
 
     def shouldSync(self, Key):
         return Key in [
@@ -65,7 +66,7 @@ class CollectionSync:
                 result = cursor.fetchone()
                 if result and result[0] != 'ok':
                     raise Exception(f'Integrity check failed {result[0]}')
-                logger.info(f'SQLite integrity check - Result: {result}')
+                logger.info('SQLite integrity check', {'result': result})
         except sqlite3.Error as e:
             logger.error(f'SQLite error: {e}')
 
@@ -75,17 +76,18 @@ class CollectionSync:
                 # self.copyDatabaseContents(temporaryFilePath, finalFilePath)
                 pass
             except Exception as error:
-                self.logger.error(f'Something went wrong syncing the database, falling back.: Key: {Key} Bucket: {Bucket} Error: {error}')
+                self.logger.error('Something went wrong syncing the database, falling back.',
+                                  {'Key': Key, 'Bucket': Bucket, 'error': error})
                 try:
                     os.remove(f'{finalFilePath}.json')
                 except OSError:
                     pass
-                self.logger.info(f'Deleting old file. - Key: {Key} Bucket: {Bucket}')
+                self.logger.info('Deleting old file.', {'Key': Key, 'Bucket': Bucket})
                 os.remove(finalFilePath)
                 os.rename(temporaryFilePath, finalFilePath)
-                self.logger.info(f'Renaming file to new path. - Key: {Key} Bucket: {Bucket}')
+                self.logger.info('Renaming file to new path.', {'Key': Key, 'Bucket': Bucket})
         else:
-            self.logger.info(f'Renaming file to new path. - Key: {Key} Bucket: {Bucket}')
+            self.logger.info('Renaming file to new path.', {'Key': Key, 'Bucket': Bucket})
             os.rename(temporaryFilePath, finalFilePath)
 
     def copyDatabaseContents(self, sourcePath, destinationPath):
