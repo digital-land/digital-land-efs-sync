@@ -149,7 +149,7 @@ class CollectionSync:
 
     def copyFileFromS3(self, Key, Bucket, destinationPath):
         try:
-            self.s3Client.download_file(Bucket, Key, destinationPath)
+            self.s3_client.download_file(Bucket, Key, destinationPath)
             self.logger.info('Finished copying file', {'Key': Key, 'Bucket': Bucket, 'destinationPath': destinationPath})
         except Exception as error:
             self.logger.error(f'Error copying file: {error}', {'Key': Key, 'Bucket': Bucket, 'destinationPath': destinationPath})
