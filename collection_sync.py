@@ -145,6 +145,9 @@ class CollectionSync:
         ]
 
         self.specifications = specifications
+
+        self.logger.info('Finished getSpecifications')
+
         return specifications
 
     def copyFileFromS3(self, Key, Bucket, destinationPath):
@@ -158,7 +161,7 @@ class CollectionSync:
         files = os.listdir('/mnt/datasets')
         currentInspections = {}
 
-        self.logger.debug('Found files to process for inspections', {'files': files})
+        self.logger.info('Found files to process for inspections', {'files': files})
 
         for file in files:
             if not file.endswith('.json') or file == 'inspect-data-all.json':
