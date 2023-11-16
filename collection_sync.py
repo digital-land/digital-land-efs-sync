@@ -149,8 +149,8 @@ class CollectionSync:
         # self.logger.info('Finished getSpecifications')
 
         # return specifications
-        if self.specifications is not None:
-            return self.specifications
+        if not hasattr(self, 'specifications'):
+            self.specifications = None
 
         try:
             response = requests.get(SPECIFICATION_URL)
@@ -179,7 +179,7 @@ class CollectionSync:
                 self.logger.info(f"Collection: {spec[collectionField]}, Dataset: {spec[datasetField]}")
 
         self.logger.info('Finished getSpecifications')
-        
+
         return self.specifications
 
     def copyFileFromS3(self, Key, Bucket, destinationPath):
