@@ -14,6 +14,7 @@ class CollectionSync:
     def __init__(self, eventId):
         self.s3_client = boto3.client('s3')
         self.logger = logging.getLogger('efs-sync')
+        self.specifications = None
         logging.basicConfig(level=logging.INFO)
         streamHandler = logging.StreamHandler(sys.stdout)
         formatter = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
