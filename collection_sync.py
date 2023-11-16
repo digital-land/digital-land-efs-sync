@@ -133,22 +133,54 @@ class CollectionSync:
         destinationDB.close()
 
     def getSpecifications(self):
-        if hasattr(self, 'specifications'):
+        # if hasattr(self, 'specifications'):
+        #     return self.specifications
+
+        # parser = csv.reader(requests.get(SPECIFICATION_URL).text.splitlines())
+        # next(parser)  # Skip header row
+        # specifications = [
+        #     {'collection': spec[0], 'dataset': spec[1]}
+        #     for spec in parser
+        #     if spec[0]
+        # ]
+
+        # self.specifications = specifications
+
+        # self.logger.info('Finished getSpecifications')
+
+        # return specifications
+        if self.specifications is not None:
             return self.specifications
 
-        parser = csv.reader(requests.get(SPECIFICATION_URL).text.splitlines())
-        next(parser)  # Skip header row
-        specifications = [
-            {'collection': spec[0], 'dataset': spec[1]}
-            for spec in parser
-            if spec[0]
-        ]
+        try:
+            response = requests.get(SPECIFICATION_URL)
+            response.raise_for_status()
+            lines = response.text.splitlines()
+            reader = csv.reader(lines, delimiter=',')
 
-        self.specifications = specifications
+            records = list(reader)
+        except requests.RequestException as e:
+            self.logger.info(f"Error fetching specifications: {e}")
+            return None
+        except csv.Error as e:
+            self.logger.info(f"Error parsing CSV data: {e}")
+            return None
+
+        fields = records.pop(0)
+        collectionField = fields.index('collection')
+        datasetField = fields.index('dataset')
+
+        self.specifications = []
+        for spec in records:
+            if spec[collectionField]:  # Ensure the 'collection' field is not empty
+                specification = {'collection': spec[collectionField], 'dataset': spec[datasetField]}
+                self.specifications.append(specification)
+                # Output each collection and dataset
+                self.logger.info(f"Collection: {spec[collectionField]}, Dataset: {spec[datasetField]}")
 
         self.logger.info('Finished getSpecifications')
-
-        return specifications
+        
+        return self.specifications
 
     def copyFileFromS3(self, Key, Bucket, destinationPath):
         try:
