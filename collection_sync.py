@@ -16,10 +16,13 @@ class CollectionSync:
         self.logger = logging.getLogger('efs-sync')
         self.specifications = None
         logging.basicConfig(level=logging.INFO)
-        streamHandler = logging.StreamHandler(sys.stdout)
-        formatter = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
-        streamHandler.setFormatter(formatter)
-        self.logger.addHandler(streamHandler)
+        # streamHandler = logging.StreamHandler(sys.stdout)
+        # formatter = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
+        # streamHandler.setFormatter(formatter)
+        # self.logger.addHandler(streamHandler)
+        console_handler = logging.StreamHandler()
+        self.logger.addHandler(console_handler)
+
 
     def processObject(self, Key, Bucket):
         self.logger.info(f'Processing new object - Key: {Key} Bucket: {Bucket}')
@@ -176,8 +179,6 @@ class CollectionSync:
             if spec[collectionField]:  # Ensure the 'collection' field is not empty
                 specification = {'collection': spec[collectionField], 'dataset': spec[datasetField]}
                 self.specifications.append(specification)
-                # Output each collection and dataset
-                # self.logger.info(f"Collection: {spec[collectionField]}, Dataset: {spec[datasetField]}")
 
         # Log the entire specifications list
         self.logger.info(f"Specifications: {self.specifications}")
