@@ -47,22 +47,6 @@ class CollectionSync:
 
 
     def shouldSync(self, Key):
-        # return Key in [
-        #     "digital-land-builder/dataset/digital-land.sqlite3",
-        #     "entity-builder/dataset/entity.sqlite3"
-        # ] or any(
-        #     cd['collection'] == f"{cd['collection']}-collection/dataset/{cd['dataset']}.sqlite3"
-        #     for cd in self.getSpecifications()
-        #         # Log the current cd
-        #         logger.info(f"Checking cd: {cd}")
-
-        #         if cd['collection'] == f"{cd['collection']}-collection/dataset/{cd['dataset']}.sqlite3":
-        #         return True
-
-        # # Return False if none of the conditions are met
-        # return False
-        # )
-        # Check for specific keys
         if Key in [
             "digital-land-builder/dataset/digital-land.sqlite3",
             "entity-builder/dataset/entity.sqlite3"
@@ -72,8 +56,11 @@ class CollectionSync:
 
         for cd in self.getSpecifications():
             self.logger.info(cd)  # Log the details of cd
-            if cd['collection'] == f"{cd['collection']}-collection/dataset/{cd['dataset']}.sqlite3":
-                self.logger.info(f'Found Item in Specifications- : {cd}')
+            # if cd['collection'] == f"{cd['collection']}-collection/dataset/{cd['dataset']}.sqlite3":
+            #     self.logger.info(f'Found Item in Specifications- : {cd}')
+            #     return True
+            if cd['collection'] in Key:
+                self.logger.info(f'Found Item in Specifications: Collection: {cd}')
                 return True
 
         # Return False if none of the conditions are met
