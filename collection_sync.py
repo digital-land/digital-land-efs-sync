@@ -15,7 +15,6 @@ class CollectionSync:
         self.s3_client = boto3.client('s3')
         self.logger = logging.getLogger('efs-sync')
         self.specifications = None
-        # logging.basicConfig(level=logging.INFO)
         self.logger.setLevel(logging.DEBUG) 
         console_handler = logging.StreamHandler()
         self.logger.addHandler(console_handler)
@@ -48,13 +47,37 @@ class CollectionSync:
 
 
     def shouldSync(self, Key):
-        return Key in [
+        # return Key in [
+        #     "digital-land-builder/dataset/digital-land.sqlite3",
+        #     "entity-builder/dataset/entity.sqlite3"
+        # ] or any(
+        #     cd['collection'] == f"{cd['collection']}-collection/dataset/{cd['dataset']}.sqlite3"
+        #     for cd in self.getSpecifications()
+        #         # Log the current cd
+        #         logger.info(f"Checking cd: {cd}")
+
+        #         if cd['collection'] == f"{cd['collection']}-collection/dataset/{cd['dataset']}.sqlite3":
+        #         return True
+
+        # # Return False if none of the conditions are met
+        # return False
+        # )
+        # Check for specific keys
+        if Key in [
             "digital-land-builder/dataset/digital-land.sqlite3",
             "entity-builder/dataset/entity.sqlite3"
-        ] or any(
-            cd['collection'] == f"{cd['collection']}-collection/dataset/{cd['dataset']}.sqlite3"
-            for cd in self.getSpecifications()
-        )
+        ]:
+            self.logger.info('Match builders keys')
+            return True
+
+        for cd in self.getSpecifications():
+            self.logger.info(cd)  # Log the details of cd
+            if cd['collection'] == f"{cd['collection']}-collection/dataset/{cd['dataset']}.sqlite3":
+                self.logger.info(f'Found Item in Specifications- : {cd}')
+                return True
+
+        # Return False if none of the conditions are met
+        return False
 
     def checkDatabaseIntegrity(self, databasePath):
         db = sqlite3.connect(databasePath)
@@ -134,22 +157,6 @@ class CollectionSync:
         destinationDB.close()
 
     def getSpecifications(self):
-        # if hasattr(self, 'specifications'):
-        #     return self.specifications
-
-        # parser = csv.reader(requests.get(SPECIFICATION_URL).text.splitlines())
-        # next(parser)  # Skip header row
-        # specifications = [
-        #     {'collection': spec[0], 'dataset': spec[1]}
-        #     for spec in parser
-        #     if spec[0]
-        # ]
-
-        # self.specifications = specifications
-
-        # self.logger.info('Finished getSpecifications')
-
-        # return specifications
         if not hasattr(self, 'specifications'):
             self.specifications = None
 
