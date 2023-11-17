@@ -177,8 +177,11 @@ class CollectionSync:
                 specification = {'collection': spec[collectionField], 'dataset': spec[datasetField]}
                 self.specifications.append(specification)
                 # Output each collection and dataset
-                self.logger.info(f"Collection: {spec[collectionField]}, Dataset: {spec[datasetField]}")
+                # self.logger.info(f"Collection: {spec[collectionField]}, Dataset: {spec[datasetField]}")
 
+        # Log the entire specifications list
+        self.logger.info(f"Specifications: {self.specifications}")
+        
         self.logger.info('Finished getSpecifications')
 
         return self.specifications
