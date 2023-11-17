@@ -16,10 +16,6 @@ class CollectionSync:
         self.logger = logging.getLogger('efs-sync')
         self.specifications = None
         logging.basicConfig(level=logging.INFO)
-        # streamHandler = logging.StreamHandler(sys.stdout)
-        # formatter = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
-        # streamHandler.setFormatter(formatter)
-        # self.logger.addHandler(streamHandler)
         console_handler = logging.StreamHandler()
         self.logger.addHandler(console_handler)
 
@@ -181,7 +177,7 @@ class CollectionSync:
                 self.specifications.append(specification)
 
         # Log the entire specifications list
-        self.logger.info(f"Specifications: {self.specifications}")
+        self.logger.debug(f"Specifications: {self.specifications}")
         
         self.logger.info('Finished getSpecifications')
 
