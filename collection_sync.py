@@ -15,7 +15,8 @@ class CollectionSync:
         self.s3_client = boto3.client('s3')
         self.logger = logging.getLogger('efs-sync')
         self.specifications = None
-        logging.basicConfig(level=logging.INFO)
+        # logging.basicConfig(level=logging.INFO)
+        self.logger.setLevel(logging.DEBUG) 
         console_handler = logging.StreamHandler()
         self.logger.addHandler(console_handler)
 
@@ -177,7 +178,7 @@ class CollectionSync:
                 self.specifications.append(specification)
 
         # Log the entire specifications list
-        self.logger.debug(f"Specifications: {self.specifications}")
+        self.logger.info(f"Specifications: {self.specifications}")
         
         self.logger.info('Finished getSpecifications')
 
