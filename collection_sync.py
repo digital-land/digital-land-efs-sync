@@ -55,10 +55,7 @@ class CollectionSync:
             return True
 
         for cd in self.getSpecifications():
-            self.logger.info(cd)  # Log the details of cd
-            # if cd['collection'] == f"{cd['collection']}-collection/dataset/{cd['dataset']}.sqlite3":
-            #     self.logger.info(f'Found Item in Specifications- : {cd}')
-            #     return True
+            # self.logger.info(cd)  # Log the details of cd
             if cd['collection'] in Key:
                 self.logger.info(f'Found Item in Specifications: Collection: {cd}')
                 return True
@@ -172,16 +169,17 @@ class CollectionSync:
                 self.specifications.append(specification)
 
         # Log the entire specifications list
-        self.logger.info(f"Specifications: {self.specifications}")
+        self.logger.info(f"Specifications lists: {self.specifications}")
         
-        self.logger.info('Finished getSpecifications')
+        # self.logger.info('Finished getSpecifications')
 
         return self.specifications
 
     def copyFileFromS3(self, Key, Bucket, destinationPath):
         try:
             self.s3_client.download_file(Bucket, Key, destinationPath)
-            self.logger.info('Finished copying file', {'Key': Key, 'Bucket': Bucket, 'destinationPath': destinationPath})
+            # self.logger.info('Finished copying file', {'Key': Key, 'Bucket': Bucket, 'destinationPath': destinationPath})
+            self.logger.info(f"Finished copying file - Key: {Key}, Bucket: {Bucket}, destinationPath: {destinationPath}")
         except Exception as error:
             self.logger.error(f'Error copying file: {error}', {'Key': Key, 'Bucket': Bucket, 'destinationPath': destinationPath})
 
