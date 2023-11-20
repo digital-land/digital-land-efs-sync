@@ -178,8 +178,7 @@ class CollectionSync:
     def copyFileFromS3(self, Key, Bucket, destinationPath):
         try:
             self.s3_client.download_file(Bucket, Key, destinationPath)
-            # self.logger.info('Finished copying file', {'Key': Key, 'Bucket': Bucket, 'destinationPath': destinationPath})
-            self.logger.info(f"Finished copying file - Key: {Key}, Bucket: {Bucket}, destinationPath: {destinationPath}")
+            self.logger.info(f'Finished copying file - Key: {Key}, Bucket: {Bucket}, destinationPath: {destinationPath}')
         except Exception as error:
             self.logger.error(f'Error copying file: {error}', {'Key': Key, 'Bucket': Bucket, 'destinationPath': destinationPath})
 
@@ -187,7 +186,7 @@ class CollectionSync:
         files = os.listdir('/mnt/datasets')
         currentInspections = {}
 
-        self.logger.info('Found files to process for inspections', {'files': files})
+        self.logger.info(f'Found files to process for inspections - files: {files}')
 
         for file in files:
             if not file.endswith('.json') or file == 'inspect-data-all.json':
@@ -204,6 +203,8 @@ class CollectionSync:
         with open('/mnt/datasets/inspect-data-all.json', 'w') as f:
             json.dump(currentInspections, f)
 
-        self.logger.info('Refreshed inspections', {'inspections': list(currentInspections.keys())})
+        self.logger.info('Refreshed inspections: %s', list(currentInspections.keys()))
+
+        
 
 
