@@ -7,6 +7,7 @@ from botocore.client import Config
 import boto3
 import json
 import sys
+import shutil
 
 SPECIFICATION_URL = 'https://raw.githubusercontent.com/digital-land/specification/main/specification/dataset.csv'
 
@@ -78,23 +79,57 @@ class CollectionSync:
             logger.error(f'SQLite error: {e}')
 
     def moveDatabase(self, temporaryFilePath, finalFilePath, Key, Bucket):
+        # if os.path.exists(finalFilePath):
+        #     try:
+        #         # self.copyDatabaseContents(temporaryFilePath, finalFilePath)
+        #         pass
+        #     except Exception as error:
+        #         self.logger.error(f'Something went wrong syncing the database, falling back.: Key: {Key} Bucket: {Bucket} Error: {error}')
+        #         try:
+        #             os.remove(f'{finalFilePath}.json')
+        #         except OSError:
+        #             pass
+        #         self.logger.info(f'Deleting old file. - Key: {Key} Bucket: {Bucket}')
+        #         os.remove(finalFilePath)
+        #         os.rename(temporaryFilePath, finalFilePath)
+        #         self.logger.info(f'Renaming file to new path. - Key: {Key} Bucket: {Bucket}')
+        # else:
+        #     self.logger.info(f'Renaming file to new path. - Key: {Key} Bucket: {Bucket}')
+        #     os.rename(temporaryFilePath, finalFilePath)
+        # Check if the final file path exists
         if os.path.exists(finalFilePath):
+            # Try to delete a related .json file
+            json_file_path = f"{finalFilePath}.json"
             try:
-                # self.copyDatabaseContents(temporaryFilePath, finalFilePath)
-                pass
-            except Exception as error:
-                self.logger.error(f'Something went wrong syncing the database, falling back.: Key: {Key} Bucket: {Bucket} Error: {error}')
-                try:
-                    os.remove(f'{finalFilePath}.json')
-                except OSError:
-                    pass
-                self.logger.info(f'Deleting old file. - Key: {Key} Bucket: {Bucket}')
+                os.remove(json_file_path)
+            except OSError as e:
+                self.logger.error(f"Error deleting JSON file: {e}", extra={'Key': Key, 'Bucket': Bucket})
+
+            self.logger.info("Deleting old file.", extra={'Key': Key, 'Bucket': Bucket})
+
+            # Delete the file at the final path
+            try:
                 os.remove(finalFilePath)
-                os.rename(temporaryFilePath, finalFilePath)
-                self.logger.info(f'Renaming file to new path. - Key: {Key} Bucket: {Bucket}')
+            except OSError as e:
+                self.logger.error(f"Error deleting final file: {e}", extra={'Key': Key, 'Bucket': Bucket})
+                return  # Exit the function if unable to delete
+
+            # Rename (move) the file from the temporary path to the final path
+            try:
+                shutil.move(temporaryFilePath, finalFilePath)
+            except OSError as e:
+                self.logger.error(f"Error moving file: {e}", extra={'Key': Key, 'Bucket': Bucket})
+                return  # Exit the function if unable to move
+
+            self.logger.info("Renaming file to new path.", extra={'Key': Key, 'Bucket': Bucket})
+
         else:
-            self.logger.info(f'Renaming file to new path. - Key: {Key} Bucket: {Bucket}')
-            os.rename(temporaryFilePath, finalFilePath)
+            # If the final file does not exist, just rename (move) it
+            try:
+                shutil.move(temporaryFilePath, finalFilePath)
+                self.logger.info("Renaming file to new path.", extra={'Key': Key, 'Bucket': Bucket})
+            except OSError as e:
+                self.logger.error(f"Error moving file: {e}", extra={'Key': Key, 'Bucket': Bucket})
 
     def copyDatabaseContents(self, sourcePath, destinationPath):
         sourceDB = sqlite3.connect(sourcePath)
