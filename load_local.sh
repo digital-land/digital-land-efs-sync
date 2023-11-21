@@ -1,6 +1,7 @@
 #! /usr/bin/env bash
 S3_BUCKET="development-collection-data"
-S3_KEY="central-activities-zone-collection/dataset/central-activities-zone.sqlite3"
+# S3_KEY="central-activities-zone-collection/dataset/central-activities-zone.sqlite3"
+S3_KEY="digital-land-builder/dataset/digital-land.sqlite3"
 EVENT_ID="78afd819-ae61-458b-81a7-421f61848465"
 # DATABASE=central-activities-zone.sqlite3
 # DATABASE_NAME=central-activities-zone
