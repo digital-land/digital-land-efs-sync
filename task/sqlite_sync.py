@@ -8,6 +8,7 @@ import json
 import sys
 import shutil
 import click
+import tempfile
 
 from pathlib import Path
 from botocore.client import Config
@@ -31,7 +32,8 @@ class CollectionSync:
             self.temp_dir = Path(temp_dir)
             self.temp_dir.mkdir(parents=True,exist_ok=True)
         else:
-            self.temp_dir = Path(mnt_dir) /  'datasets/temporary'
+            self.temp_dir = Path('var')
+            self.temp_dir.mkdir(parents=True,exist_ok=True)
 
         # add output directories for info to be stored, it's assumed this
         # will be in a mounted volume
@@ -53,14 +55,16 @@ class CollectionSync:
 
         
 
-    def get_current_sqlite_hash(self,sqlite_name):
+    def get_current_sqlite_hash(self,sqlite_stem):
         """
         looks in the hash directory and 
         """
-        hash_json_path = self.hash_dir / f'{sqlite_name}.json'
+        hash_json_path = self.hash_dir / f'{sqlite_stem}.json'
         if hash_json_path.exists():
-            json.loads(self.hash_dir / f'{sqlite_name}.json')['hash']
-    
+            with open(self.hash_dir / f'{sqlite_stem}.json') as file:
+                hash = json.load(file)['hash']
+            return hash
+
     def update_current_sqlite_hash(self,sqlite_name,new_sqlite_hash):
 
         # Specify the file path
@@ -105,14 +109,17 @@ class CollectionSync:
 
                 # sqlite has been moved now to update the json 
                 self.update_current_sqlite_hash(key_path.stem,new_sqlite_hash)
+
+                if type(self.temp_dir) == tempfile.TemporaryDirectory:
+                    self.temp_dir.cleanup()
             
             else:
                 self.logger.info(
-                f"Object is not subject to sync, skipping - Key: {key} Bucket: {bucket}"
+                f"Object is not subject to sync hashes match so no updates to data, skipping - Key: {key} Bucket: {bucket}"
             )
         else:
             self.logger.info(
-                f"Object is not subject to sync, skipping - Key: {key} Bucket: {bucket}"
+                f"Object is not subject to sync update specification to include, skipping - Key: {key} Bucket: {bucket}"
             )
 
     def should_sync(self, key):
