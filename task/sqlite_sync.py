@@ -20,45 +20,42 @@ SPECIFICATION_URL = "https://raw.githubusercontent.com/digital-land/specificatio
 
 class CollectionSync:
     def __init__(self, mnt_dir=None,temp_dir=None):
-        # directories can be set on input to move where temp and mounted riectories are
+        
         if mnt_dir:
             self.mnt_dir = Path(mnt_dir)
         else:
             mnt_dir = Path('mnt')
         
-
-        # TODO If no temp directory provided let's create one in the local system
         if temp_dir:
             self.temp_dir = Path(temp_dir)
-            self.temp_dir.mkdir(parents=True,exist_ok=True)
         else:
             self.temp_dir = Path('var')
-            self.temp_dir.mkdir(parents=True,exist_ok=True)
+        
+
 
         # add output directories for info to be stored, it's assumed this
         # will be in a mounted volume
         self.dataset_dir = mnt_dir / 'datasets'
         self.hash_dir = mnt_dir/ 'hashes'
 
+        # make sure file structure is made
+        self.temp_dir.mkdir(parents=True,exist_ok=True)
         self.dataset_dir.mkdir(parents=True,exist_ok=True)
         self.hash_dir.mkdir(parents=True,exist_ok=True)
+
 
         # set up s3 client
         self.s3_client = boto3.client("s3")
         self.logger = logging.getLogger("efs-sync")
         self.specifications = None
 
-        self.logger.setLevel(logging.DEBUG)
         # set logger for class, this can probably be done for the whole file
+        self.logger.setLevel(logging.DEBUG)
         console_handler = logging.StreamHandler()
         self.logger.addHandler(console_handler)
 
-        
 
     def get_current_sqlite_hash(self,sqlite_stem):
-        """
-        looks in the hash directory and 
-        """
         hash_json_path = self.hash_dir / f'{sqlite_stem}.json'
         if hash_json_path.exists():
             with open(self.hash_dir / f'{sqlite_stem}.json') as file:
@@ -300,7 +297,7 @@ class CollectionSync:
                 f"Error copying file: {error}",
                 {"key": key, "bucket": bucket, "destination_path": destination_path},
             )
-    # not sure this is need
+    
     def update_inspection_file(self):
         files = [file_path.name for file_path in self.dataset_dir.iterdir() if file_path.is_file()]
         current_inspections = {}

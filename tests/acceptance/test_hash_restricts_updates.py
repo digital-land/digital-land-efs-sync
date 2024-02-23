@@ -85,9 +85,7 @@ def test_run_process_where_hash_matches(s3_client,testing_bucket,tmp_path):
     with open(hash_path, 'w') as file:
             file.write(json.dumps(hash_dict))
 
-    # assert (mnt_dir / 'datasets' / test_sqlite_data.name).exists()
-    
-    # 
+    # run process
     collection_sync = CollectionSync(mnt_dir=mnt_dir,temp_dir=temp_dir)
     collection_sync.process_object(key, testing_bucket)
 
@@ -131,9 +129,7 @@ def test_run_process_where_hash_does_not_match(testing_bucket,tmp_path,s3_client
     with open(hash_path, 'w') as file:
             file.write(json.dumps(hash_dict))
 
-    # assert (mnt_dir / 'datasets' / test_sqlite_data.name).exists()
-    
-    # 
+    # run process
     collection_sync = CollectionSync(mnt_dir=mnt_dir,temp_dir=temp_dir)
     collection_sync.process_object(key, testing_bucket)
 
