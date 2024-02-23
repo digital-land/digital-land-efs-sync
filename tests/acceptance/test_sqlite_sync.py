@@ -36,8 +36,8 @@ def testing_bucket(s3_client):
 
 def test_run_process_where_hash_json_does_not_exist(s3_client,testing_bucket,tmp_path):
     # upload a file to the bucket (let's just use one that exists for ease)
-    test_sqlite_data = Path('tests/data/article-4-direction-area.sqlite3')
-    test_sqlite_data_json = Path('tests/data/article-4-direction-area.sqlite3.json')
+    test_sqlite_data = Path('tests/data/central-activities-zone.sqlite3')
+    test_sqlite_data_json = Path('tests/data/central-activities-zone.sqlite3.json')
     key = test_sqlite_data.name
     json_key = test_sqlite_data_json.name
     s3_client.upload_file(test_sqlite_data,testing_bucket,key)
@@ -54,8 +54,7 @@ def test_run_process_where_hash_json_does_not_exist(s3_client,testing_bucket,tmp
     collection_sync.process_object(key, testing_bucket)
 
     expected_output_paths = [
-        mnt_dir / 'datasets' / 'article-4-direction-area.sqlite3',
-        # mnt_dir / 'datasets' / 'article-4-direction-area.sqlite3.json',
+        mnt_dir / 'datasets' / test_sqlite_data.name,
         mnt_dir / 'datasets' / 'inspect-data-all.json'
     ]
 
