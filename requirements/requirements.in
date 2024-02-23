@@ -1,7 +1,3 @@
-requests
 boto3
-flake8
-pre-commit
-black
-pytest
+requests
 aiohttp
