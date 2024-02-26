@@ -42,6 +42,7 @@ def test_run_process_where_hash_json_does_not_exist(s3_client,testing_bucket,tmp
     mnt_dir.mkdir(parents=True,exist_ok=True)
     temp_dir = tmp_path / 'temp'
     temp_dir.mkdir(parents=True,exist_ok=True)
+    hash_dir = mnt_dir/ 'datasets' / 'hashes'
     
     # 
     collection_sync = CollectionSync(mnt_dir=mnt_dir,temp_dir=temp_dir)
@@ -50,7 +51,7 @@ def test_run_process_where_hash_json_does_not_exist(s3_client,testing_bucket,tmp
     expected_output_paths = [
         mnt_dir / 'datasets' / test_sqlite_data.name,
         mnt_dir / 'datasets' / 'inspect-data-all.json',
-        mnt_dir / 'hashes' / f'{test_sqlite_data.stem}.json'
+        hash_dir / f'{test_sqlite_data.stem}.json'
     ]
 
     for expected_output_path in expected_output_paths:
@@ -70,7 +71,7 @@ def test_run_process_where_hash_matches(s3_client,testing_bucket,tmp_path):
     mnt_dir.mkdir(parents=True,exist_ok=True)
     temp_dir = tmp_path / 'temp'
     temp_dir.mkdir(parents=True,exist_ok=True)
-    hash_dir = mnt_dir / 'hashes'
+    hash_dir = mnt_dir/ 'datasets' / 'hashes'
     hash_dir.mkdir(parents=True,exist_ok=True)
     dataset_dir = mnt_dir / 'datasets'
     dataset_dir.mkdir(parents=True,exist_ok=True)
@@ -80,7 +81,7 @@ def test_run_process_where_hash_matches(s3_client,testing_bucket,tmp_path):
     current_sqlite_mtime = os.stat(dataset_dir / test_sqlite_data.name).st_mtime
 
     # add hash to file
-    hash_path = mnt_dir / 'hashes' / f'{test_sqlite_data.stem}.json'
+    hash_path = hash_dir / f'{test_sqlite_data.stem}.json'
     hash_dict = {'hash':'25f3a5bcc31bf2cf991d636fe2fe36ea8f9fe162'}
     with open(hash_path, 'w') as file:
             file.write(json.dumps(hash_dict))
@@ -91,7 +92,7 @@ def test_run_process_where_hash_matches(s3_client,testing_bucket,tmp_path):
 
     expected_output_paths = [
         mnt_dir / 'datasets' / test_sqlite_data.name,
-        mnt_dir / 'hashes' / f'{test_sqlite_data.stem}.json'
+        hash_dir / f'{test_sqlite_data.stem}.json'
     ]
 
     for expected_output_path in expected_output_paths:
@@ -114,7 +115,7 @@ def test_run_process_where_hash_does_not_match(testing_bucket,tmp_path,s3_client
     mnt_dir.mkdir(parents=True,exist_ok=True)
     temp_dir = tmp_path / 'temp'
     temp_dir.mkdir(parents=True,exist_ok=True)
-    hash_dir = mnt_dir / 'hashes'
+    hash_dir = mnt_dir / 'datasets' /'hashes'
     hash_dir.mkdir(parents=True,exist_ok=True)
     dataset_dir = mnt_dir / 'datasets'
     dataset_dir.mkdir(parents=True,exist_ok=True)
@@ -124,7 +125,7 @@ def test_run_process_where_hash_does_not_match(testing_bucket,tmp_path,s3_client
     current_sqlite_mtime = os.stat(dataset_dir / test_sqlite_data.name).st_mtime
 
     # add hash to file
-    hash_path = mnt_dir / 'hashes' / f'{test_sqlite_data.stem}.json'
+    hash_path = hash_dir / f'{test_sqlite_data.stem}.json'
     hash_dict = {'hash':'notwhattheactualhashis'}
     with open(hash_path, 'w') as file:
             file.write(json.dumps(hash_dict))
@@ -136,7 +137,7 @@ def test_run_process_where_hash_does_not_match(testing_bucket,tmp_path,s3_client
     expected_output_paths = [
         mnt_dir / 'datasets' / test_sqlite_data.name,
         mnt_dir / 'datasets' / 'inspect-data-all.json',
-        mnt_dir / 'hashes' / f'{test_sqlite_data.stem}.json'
+        hash_dir / f'{test_sqlite_data.stem}.json'
     ]
 
     for expected_output_path in expected_output_paths:

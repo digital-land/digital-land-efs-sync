@@ -24,7 +24,7 @@ class CollectionSync:
         if mnt_dir:
             self.mnt_dir = Path(mnt_dir)
         else:
-            mnt_dir = Path('mnt')
+            mnt_dir = Path('/mnt/')
         
         if temp_dir:
             self.temp_dir = Path(temp_dir)
@@ -36,7 +36,7 @@ class CollectionSync:
         # add output directories for info to be stored, it's assumed this
         # will be in a mounted volume
         self.dataset_dir = mnt_dir / 'datasets'
-        self.hash_dir = mnt_dir/ 'hashes'
+        self.hash_dir = mnt_dir/ 'datasets'/ 'hashes'
 
         # make sure file structure is made
         self.temp_dir.mkdir(parents=True,exist_ok=True)
