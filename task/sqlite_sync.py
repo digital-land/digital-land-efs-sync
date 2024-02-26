@@ -324,13 +324,12 @@ class CollectionSync:
         self.logger.info("Refreshed inspections: %s", list(current_inspections.keys()))
 
 @click.command()
-@click.option('--key', default=1, help='Number of greetings.')
-@click.option('--name', prompt='Your name',
-              help='The person to greet.')
-def sync_dataset_sqlite_file():
+@click.option('--key')
+@click.option('--bucket')
+def sync_dataset_sqlite_file(key,bucket):
     # Create an instance of the CollectionSync
     collection_sync = CollectionSync()
-    collection_sync.process_object('$S3_KEY', '$S3_BUCKET')
+    collection_sync.process_object(key, bucket)
 
 
 if __name__ == '__main__':
