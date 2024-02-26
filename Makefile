@@ -7,3 +7,13 @@ init::
 
 test::
 	python -m pytest tests/acceptance
+
+dbhash::
+	mkdir -p ./bin
+	cd ./bin; \
+	wget https://www.sqlite.org/src/tarball/sqlite.tar.gz; \
+	tar -xzvf sqlite.tar.gz; \
+	rm -rf sqlite.tar.gz;\
+	cd ./sqlite; \
+	./configure; \
+	make dbhash 
