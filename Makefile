@@ -11,7 +11,7 @@ test::
 dbhash::
 	mkdir -p ./bin
 	cd ./bin; \
-	wget https://www.sqlite.org/src/tarball/sqlite.tar.gz; \
+	curl -o sqlite.tar.gz https://www.sqlite.org/src/tarball/sqlite.tar.gz; \
 	tar -xzvf sqlite.tar.gz; \
 	rm -rf sqlite.tar.gz;\
 	cd ./sqlite; \
