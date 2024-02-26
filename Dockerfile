@@ -1,7 +1,7 @@
 FROM ubuntu:20.04
 
 RUN apt-get update \
-    && apt-get install -y curl sqlite python3-pip unzip git dbhash\
+    && apt-get install -y curl sqlite python3-pip unzip git\
     && apt-get clean
 
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
@@ -13,6 +13,8 @@ WORKDIR /src
 
 RUN pip install --user -U pip
 RUN pip install --user --no-cache-dir -r requirements/requirements.txt
+RUN make dbhash
+RUN source ./.env
 
 RUN chmod +x load.sh
 
