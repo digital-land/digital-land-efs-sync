@@ -14,7 +14,7 @@ WORKDIR /src
 RUN pip install --user -U pip
 RUN pip install --user --no-cache-dir -r requirements/requirements.txt
 RUN make dbhash
-RUN source ./.env
+ENV PATH="$PATH:$PWD/bin/sqlite"
 
 RUN chmod +x load.sh
 
