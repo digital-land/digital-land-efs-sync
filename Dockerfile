@@ -1,7 +1,9 @@
 FROM ubuntu:20.04
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 RUN apt-get update \
-    && apt-get install -y curl sqlite python3-pip unzip tclsh git\
+    && apt-get install -y curl sqlite python3-pip unzip git tcl\
     && apt-get clean
 
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
