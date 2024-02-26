@@ -71,6 +71,8 @@ class CollectionSync:
         with open(file_path, 'w') as file:
             hash_dict = {'hash':new_sqlite_hash}
             file.write(json.dumps(hash_dict))
+        
+        self.logger.info(f'check file exists:{file_path.exists()}')
 
 
     def process_object(self, key, bucket):
@@ -110,8 +112,9 @@ class CollectionSync:
                 # sqlite has been moved now to update the json 
                 self.update_current_sqlite_hash(key_path.stem,new_sqlite_hash)
                 self.logger.info(
-                    f"Object has been updated, including hashes and json inspection file - Key: {key} Bucket: {bucket}"
+                    f"Object has been updated, including hashes and json inspection file new hash:{self.get_current_sqlite_hash(key_path.stem)} - Key: {key} Bucket: {bucket}"
                 )
+
             
             else:
                 self.logger.info(

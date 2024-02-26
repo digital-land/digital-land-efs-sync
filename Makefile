@@ -7,6 +7,7 @@ init::
 
 test::
 	python -m pytest tests/acceptance
+	python -m pytest tests/integration
 
 dbhash::
 	mkdir -p ./bin
