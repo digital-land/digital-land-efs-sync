@@ -92,7 +92,7 @@ class CollectionSync:
             current_sqlite_hash = self.get_current_sqlite_hash(key_path.stem)
             new_sqlite_hash = generate_sqlite_hash(temp_file_path)
 
-            if generate_sqlite_hash(temp_file_path) != current_sqlite_hash:
+            if new_sqlite_hash != current_sqlite_hash:
             
                 self.move_database(temp_file_path, final_file_path, key, bucket)
 
@@ -106,9 +106,9 @@ class CollectionSync:
 
                 # sqlite has been moved now to update the json 
                 self.update_current_sqlite_hash(key_path.stem,new_sqlite_hash)
-
-                if type(self.temp_dir) == tempfile.TemporaryDirectory:
-                    self.temp_dir.cleanup()
+                self.logger.info(
+                    f"Object has been updated, including hashes and json inspection file - Key: {key} Bucket: {bucket}"
+                )
             
             else:
                 self.logger.info(

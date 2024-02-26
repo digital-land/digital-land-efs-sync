@@ -2,8 +2,6 @@ import subprocess
 import os
 
 def generate_sqlite_hash(sqlite_path):
-    path = os.environ['PATH']
-    print(path)
     try:
         # Execute sqlite3 command to get the hash of the database
         output = subprocess.check_output(['dbhash', sqlite_path], stderr=subprocess.STDOUT)
