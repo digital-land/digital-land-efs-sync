@@ -43,7 +43,9 @@ charset-normalizer==3.3.1
     #   -r requirements/requirements.txt
     #   requests
 click==8.1.7
-    # via black
+    # via
+    #   -r requirements/requirements.txt
+    #   black
 cryptography==42.0.4
     # via moto
 distlib==0.3.8
