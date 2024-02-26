@@ -144,3 +144,7 @@ def test_run_process_where_hash_does_not_match(testing_bucket,tmp_path,s3_client
 
     # check modification date hasn't changed betweent he sqlites
     assert os.stat(mnt_dir / 'datasets' / test_sqlite_data.name).st_mtime > current_sqlite_mtime, 'sqlite file wasnt modified implying the hash stopped it' 
+
+    # check hash has been updated
+    new_hash = collection_sync.get_current_sqlite_hash(test_sqlite_data.stem)
+    assert new_hash == '25f3a5bcc31bf2cf991d636fe2fe36ea8f9fe162'

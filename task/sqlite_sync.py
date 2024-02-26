@@ -91,6 +91,9 @@ class CollectionSync:
 
             current_sqlite_hash = self.get_current_sqlite_hash(key_path.stem)
             new_sqlite_hash = generate_sqlite_hash(temp_file_path)
+            self.logger.info(
+                    f"new hash :{new_sqlite_hash}, current hash:{current_sqlite_hash} - Key: {key} Bucket: {bucket}"
+                )
 
             if new_sqlite_hash != current_sqlite_hash:
             
