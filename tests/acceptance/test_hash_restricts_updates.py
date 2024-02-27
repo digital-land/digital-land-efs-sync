@@ -82,7 +82,7 @@ def test_run_process_where_hash_matches(s3_client,testing_bucket,tmp_path):
 
     # add hash to file
     hash_path = hash_dir / f'{test_sqlite_data.stem}.json'
-    hash_dict = {'hash':'25f3a5bcc31bf2cf991d636fe2fe36ea8f9fe162'}
+    hash_dict = {'hash':'641e7b7c812b21281cc343659742f3c2d9c1e475'}
     with open(hash_path, 'w') as file:
             file.write(json.dumps(hash_dict))
 
@@ -148,4 +148,4 @@ def test_run_process_where_hash_does_not_match(testing_bucket,tmp_path,s3_client
 
     # check hash has been updated
     new_hash = collection_sync.get_current_sqlite_hash(test_sqlite_data.stem)
-    assert new_hash == '25f3a5bcc31bf2cf991d636fe2fe36ea8f9fe162'
+    assert new_hash == '641e7b7c812b21281cc343659742f3c2d9c1e475'

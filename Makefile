@@ -5,9 +5,14 @@ piptool-compile::
 init::
 	pip install -r requirements/dev-requirements.txt
 
-test::
-	python -m pytest tests/acceptance
+
+test:: test-integration test-acceptance
+
+test-integration::
 	python -m pytest tests/integration
+
+test-acceptance::
+	python -m pytest tests/acceptance
 
 dbhash::
 	mkdir -p ./bin

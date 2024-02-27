@@ -60,7 +60,7 @@ class CollectionSync:
         if hash_json_path.exists():
             with open(self.hash_dir / f'{sqlite_stem}.json') as file:
                 hash = json.load(file)['hash']
-            return hash
+            return hash 
 
     def update_current_sqlite_hash(self,sqlite_name,new_sqlite_hash):
 
