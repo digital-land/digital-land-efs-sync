@@ -1,0 +1,30 @@
+{
+    "central-activities-zone": {
+      "hash": "213a9c07e33d23fbfd1084af5ced353ae50866255cc4a5b689e45fb08cd7c9da",
+      "size": 245760,
+      "file": "dataset/central-activities-zone.sqlite3",
+      "tables": {
+        "dataset_resource": {
+          "count": 3
+        },
+        "column_field": {
+          "count": 11
+        },
+        "issue": {
+          "count": 27
+        },
+        "entity": {
+          "count": 10
+        },
+        "old_entity": {
+          "count": 0
+        },
+        "fact": {
+          "count": 67
+        },
+        "fact_resource": {
+          "count": 69
+        }
+      }
+    }
+  }
