@@ -103,6 +103,7 @@ class CollectionSync:
 
                 if key not in [
                     "digital-land-builder/dataset/digital-land.sqlite3",
+                    "digital-land-builder/dataset/performance.sqlite3",
                     "entity-builder/dataset/entity.sqlite3",
                 ]:
                     self.copy_file_from_s3(f"{key}.json", bucket, f"{final_file_path}.json")
@@ -128,6 +129,7 @@ class CollectionSync:
     def should_sync(self, key):
         if key in [
             "digital-land-builder/dataset/digital-land.sqlite3",
+            "digital-land-builder/dataset/performance.sqlite3",
             "entity-builder/dataset/entity.sqlite3",
         ]:
             self.logger.info("Match builders keys")
