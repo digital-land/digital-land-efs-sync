@@ -322,7 +322,7 @@ class CollectionSync:
                     current_inspections.update(inspection)
             except Exception as error:
                 self.logger.error(
-                    "Failed to parse inspection file",
+                    f"Failed to parse inspection file with error {error}",
                     {"inspection_file": self.dataset_dir / file},
                 )
 
