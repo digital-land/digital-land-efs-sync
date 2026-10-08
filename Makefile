@@ -6,7 +6,10 @@ init::
 	pip install -r requirements/dev-requirements.txt
 
 
-test:: test-integration test-acceptance
+test:: test-integration test-acceptance test-unit
+
+test-unit::
+	python -m pytest tests/unit
 
 test-integration::
 	python -m pytest tests/integration
