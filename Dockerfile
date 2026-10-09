@@ -18,6 +18,8 @@ RUN pip install --user --no-cache-dir -r requirements/requirements.txt
 RUN make dbhash
 ENV PATH="$PATH:./bin/sqlite"
 
-RUN chmod +x load.sh
+RUN chmod +x load.sh retire.sh
 
-ENTRYPOINT [ "./load.sh" ]
+# CMD rather than ENTRYPOINT, so Airflow can run ./retire.sh instead. The S3 trigger only sets
+# environment variables, so it still runs ./load.sh
+CMD [ "./load.sh" ]

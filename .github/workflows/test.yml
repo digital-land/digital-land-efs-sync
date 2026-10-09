@@ -1,0 +1,22 @@
+name: Test
+run-name: Test - ${{ github.head_ref || github.ref_name }} by @${{ github.actor }}
+
+on:
+  push:
+    branches-ignore: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.8'
+
+      - run: make init
+
+      - name: Unit Tests
+        run: make test-unit
