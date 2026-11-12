@@ -14,7 +14,6 @@ ADD . /src
 WORKDIR /src
 
 RUN pip install --user -U pip
-#RUN pip-compile --upgrade
 RUN pip install --user --no-cache-dir -r requirements/requirements.txt
 RUN make dbhash
 ENV PATH="$PATH:./bin/sqlite"
